@@ -14,7 +14,6 @@ namespace CSETWeb_Api.BusinessLogic.Models
 {
     public interface ILogger
     {
-        void Log(string message);
     }
 }
 

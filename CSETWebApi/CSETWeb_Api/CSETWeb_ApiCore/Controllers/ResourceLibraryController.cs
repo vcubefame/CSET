@@ -7,22 +7,18 @@
 using CSET_Main.Common;
 using CSET_Main.Data.ControlData;
 using DataLayerCore.Model;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
-using Lucene.Net.Search;
 using Lucene.Net.Store;
 using ResourceLibrary.Nodes;
 using ResourceLibrary.Search;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Web.Http;
 using CSET_Main.Questions.InformationTabData;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CSETWeb_Api.Controllers
 {
-    public class ResourceLibraryController : ApiController
+    public class ResourceLibraryController : ControllerBase
     {
         /// <summary>
         /// Returns the details under a given question
@@ -37,10 +33,7 @@ namespace CSETWeb_Api.Controllers
                 return new List<ResourceNode>();
 
             Lucene.Net.Store.Directory fsDir = FSDirectory.Open(new DirectoryInfo(Path.Combine(CSETGlobalProperties.Static_Application_Path, "LuceneIndex")));
-
-            IndexReader reader = IndexReader.Open(fsDir, true);
-            Searcher searcher = new IndexSearcher(reader);
-            Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_29);
+            
             CSETGlobalProperties props = new CSETGlobalProperties();
             using (CSET_Context context = new CSET_Context()) {
                 SearchDocs search = new SearchDocs(props, new ResourceLibraryRepository(context, props));
@@ -50,7 +43,7 @@ namespace CSETWeb_Api.Controllers
 
         [HttpGet]
         [Route("api/ShowResourceLibrary")]
-        public IHttpActionResult ShowResourceLibrary()
+        public IActionResult ShowResourceLibrary()
         {
             var buildDocuments = new QuestionInformationTabData().GetBuildDocuments();
             return Ok(buildDocuments != null && buildDocuments.Count > 100);
@@ -68,7 +61,7 @@ namespace CSETWeb_Api.Controllers
 
         [HttpGet]
         [Route("api/ResourceLibrary/doc")]
-        public string GetFlowDoc([FromUri] string type, [FromUri] int id)
+        public string GetFlowDoc([FromQuery] string type, [FromQuery] int id)
         {
             // pull the flowdoc from the database
             BusinessManagers.FlowDocManager fdm = new BusinessManagers.FlowDocManager();
