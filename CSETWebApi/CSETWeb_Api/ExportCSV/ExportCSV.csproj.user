@@ -29,4 +29,8 @@
     <StartArguments>C:\Users\HANSBK\Documents\CSET\Aggregate1.cset</StartArguments>
     <RemoteDebugMachine>192.168.229.133</RemoteDebugMachine>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'CSET_DEV|AnyCPU'">
+    <RemoteDebugEnabled>true</RemoteDebugEnabled>
+    <RemoteDebugMachine>192.168.229.133</RemoteDebugMachine>
+  </PropertyGroup>
 </Project>
